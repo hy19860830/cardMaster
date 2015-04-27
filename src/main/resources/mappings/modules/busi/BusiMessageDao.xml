@@ -9,7 +9,7 @@
 		a.to_user AS "toUser",
 		a.company_id AS "companyId",
 		a.company_name AS "companyName",
-		a.create_id AS "createId",
+		a.create_id AS "createId", 
 		a.create_name AS "createName",
 		a.create_date AS "createDate"
 	</sql>
