@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.busi.dao.BusiMessageDao">
+    
+	<sql id="busiMessageColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.content AS "content",
+		a.to_user AS "toUser",
+		a.company_id AS "companyId",
+		a.company_name AS "companyName",
+		a.create_id AS "createId",
+		a.create_name AS "createName",
+		a.create_date AS "createDate"
+	</sql>
+	
+	<sql id="busiMessageJoins">
+		LEFT JOIN sys_user u4 ON u4.id = a.to_user
+	</sql>
+    
+	<select id="get" resultType="BusiMessage">
+		SELECT 
+			<include refid="busiMessageColumns"/>
+		FROM busi_message a
+		<include refid="busiMessageJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusiMessage">
+		SELECT 
+			<include refid="busiMessageColumns"/>
+		FROM busi_message a
+		<include refid="busiMessageJoins"/>
+		<where>
+			
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			and a.company_id = #{companyId}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusiMessage">
+		SELECT 
+			<include refid="busiMessageColumns"/>
+		FROM busi_message a
+		<include refid="busiMessageJoins"/>
+		<where>
+			AND a.company_id = #{companyId}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO busi_message(
+			id,
+			title,
+			content,
+			to_user,
+			company_id,
+			company_name,
+			create_id,
+			create_name,
+			create_date
+		) VALUES (
+			#{id},
+			#{title},
+			#{content},
+			#{toUser},
+			#{companyId},
+			#{companyName},
+			#{createId},
+			#{createName},
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE busi_message SET 	
+			title = #{title},
+			content = #{content},
+			to_user = #{toUser}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM busi_message
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
