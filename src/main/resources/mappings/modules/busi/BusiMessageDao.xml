@@ -5,7 +5,7 @@
 	<sql id="busiMessageColumns">
 		a.id AS "id",
 		a.title AS "title",
-		a.content AS "content1111111111111111111",
+		a.content AS "content11111111wwwwwww11111111",
 		a.to_user AS "toUser",
 		a.company_id AS "companyId",
 		a.company_name AS "companyName",
